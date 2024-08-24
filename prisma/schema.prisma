@@ -1,0 +1,87 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Post {
+  GARDIEN_DE_BUT
+  ARRIERE_LATERAL
+  STOPPEUR
+  LIBERO
+  MILIEU_DEFENSIF
+  MILIEU_OFFENSIF
+  ATTAQUANT
+  AVANT_CENTRE
+  REMPLACANT
+}
+
+model JoueurDetail {
+  id       Int     @id @default(autoincrement())
+  image    String
+  numero   Int     @unique
+  post     Post    @default(REMPLACANT)
+  maitriseDePostePercent Int
+  joueurId Int
+  joueur   Joueur? @relation(fields: [joueurId], references: [id]) 
+}
+
+model Joueur {
+  id               Int          @id @default(autoincrement())
+  name             String
+  prenoms          String?
+  dateDeNaissance  DateTime
+  address          String?
+  contact          String
+  detail           JoueurDetail[]
+}
+
+model Equipement{
+  id        Int @id @default(autoincrement())
+  name      String
+  description  String?
+  quantite  Int
+}
+
+model DetailDeMatch{
+  id Int @id @default(autoincrement())
+  qualifiactionName String
+  jourDuMatch DateTime
+  maromaintyBut  Int
+  adversairreBut Int
+  matchId Int
+  match   Match? @relation(fields: [matchId], references: [id]) 
+}
+model Trophe{
+  id Int @id @default(autoincrement())
+  image  String
+  matchId Int
+  match   Match? @relation(fields: [matchId], references: [id])
+}
+
+model Match{
+  id Int @id @default(autoincrement())
+  adversairre String
+  detail DetailDeMatch[]
+  trophe Trophe[]
+}
+
+model Coach{
+  id  Int @id   @default(autoincrement())
+  image String
+  name String
+  prenoms String?
+  email String
+  contact String
+  address String
+  dateDeNaissance DateTime
+}
