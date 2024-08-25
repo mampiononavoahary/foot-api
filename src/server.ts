@@ -3,6 +3,7 @@ import cors from "@fastify/cors";
 import {schemas} from "./modules/shared";
 import { coachRoute } from "./modules/coach";
 import { defaultRoute } from "./modules/main";
+import { equipementRoute } from "./modules/equipement";
 
 const DEFAULT_OPTIONS = {};
 
@@ -20,6 +21,7 @@ export const buildServer = (opts: Record<string, unknown> = {}) => {
 
   server.register(defaultRoute)
   server.register(coachRoute);
+  server.register(equipementRoute);
 
   return server;
 }
