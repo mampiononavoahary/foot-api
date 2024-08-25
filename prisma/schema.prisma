@@ -54,10 +54,10 @@ model Equipement{
 
 model DetailDeMatch{
   id Int @id @default(autoincrement())
-  qualifiactionName String
   jourDuMatch DateTime
   maromaintyBut  Int
   adversairreBut Int
+  qualificationName String
   match Match[]
 }
 model Trophe{

@@ -22,7 +22,6 @@ export const getCoachHandler = async (request: FastifyRequest, reply: FastifyRep
     try {
         const coaches = await getAllCoach();  // Récupère tous les coachs
         reply.send(coaches);
-        console.log(coaches);
         
     } catch (error) {
         reply.status(500).send({ message: error.message });
@@ -34,7 +33,7 @@ export const saveCoachHandler = async (request: FastifyRequest, reply: FastifyRe
         const data: createCoach = request.body as createCoach;
 
         const newCoach = await saveCoach(data);
-        reply.send(newCoach);
+        reply.status(201).send(newCoach);
     } catch (error) {
         reply.status(500).send({ message: error.message });
     }
