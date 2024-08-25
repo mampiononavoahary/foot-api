@@ -1,5 +1,5 @@
 import { prisma } from "src/lib/db"
-import { notFoundError } from "src/util/error";
+import { conflictError, notFoundError } from "src/util/error";
 import { createCoach } from "./schema";
 
 export const getAllCoach = async() => {
@@ -24,9 +24,19 @@ export const saveCoach = async (data: createCoach) => {
         // On vérifie que toutes les propriétés requises sont présentes
         const { image, name, prenoms, email, contact, address, dateDeNaissance } = data;
 
+        const getCoachByEMail = await prisma.coach.findFirst({
+            where:{
+                email: email
+            },
+        });
+        if (getCoachByEMail) {
+            throw conflictError(`${email} is already exists`);
+        }
         if (!image || !name || !email || !contact || !address || !dateDeNaissance) {
             throw new Error("Missing required fields for Coach creation.");
         }
+
+        const formattedDate = new Date(dateDeNaissance+'T00:00:00.000Z');
 
         const newCoach = await prisma.coach.create({
             data: {
@@ -36,13 +46,14 @@ export const saveCoach = async (data: createCoach) => {
                 email,
                 contact,
                 address,
-                dateDeNaissance
+                dateDeNaissance: formattedDate
             }
         });
-
+                
         return newCoach;
     } catch (error) {
         throw new Error(`Failed to save coach: ${error.message}`);
+        
     }
 };
 
@@ -55,6 +66,9 @@ export const updateCoach = async (data: createCoach) => {
             throw new Error("Missing required fields for Coach creation.");
         }
 
+        const formattedDate = new Date(dateDeNaissance+'T00:00:00.000Z');
+
+
         const newCoach = await prisma.coach.update({
             where:{
                 id:data.id
@@ -66,7 +80,7 @@ export const updateCoach = async (data: createCoach) => {
                 email,
                 contact,
                 address,
-                dateDeNaissance
+                dateDeNaissance:formattedDate
             }
         });
 

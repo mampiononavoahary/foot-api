@@ -31,8 +31,7 @@ model JoueurDetail {
   numero   Int     @unique
   post     Post    @default(REMPLACANT)
   maitriseDePostePercent Int
-  joueurId Int
-  joueur   Joueur? @relation(fields: [joueurId], references: [id]) 
+  joueur           Joueur[] 
 }
 
 model Joueur {
@@ -42,7 +41,8 @@ model Joueur {
   dateDeNaissance  DateTime
   address          String?
   contact          String
-  detail           JoueurDetail[]
+  joueurDetail Int?
+  detail   JoueurDetail? @relation(fields: [joueurDetail], references: [id])
 }
 
 model Equipement{
@@ -80,7 +80,7 @@ model Coach{
   image String
   name String
   prenoms String?
-  email String
+  email String @unique
   contact String
   address String
   dateDeNaissance DateTime
