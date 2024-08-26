@@ -26,7 +26,7 @@ export const getMatchById = async(id: number) => {
             }
         });
         if (!match) {
-            throw notFoundError(`match with id ${id} not found`)
+            throw notFoundError(`match with id ${id.toString()} not found`)
         }
         return match;
     } catch (error) {

@@ -64,6 +64,7 @@ model Trophe{
   id Int @id @default(autoincrement())
   image  String
   matchId Int?
+  tropheName String
   match   Match? @relation(fields: [matchId], references: [id])
 }
 
