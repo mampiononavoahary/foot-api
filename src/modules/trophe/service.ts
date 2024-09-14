@@ -7,7 +7,11 @@ export const getAllTrophe = async() => {
     try {
         const trophes = await prisma.trophe.findMany({
             include:{
-                match: true
+                match:{
+                    include:{
+                        detail:true
+                    }
+                }
             }
         });
 
@@ -73,6 +77,7 @@ export const deleteTrophe = async(id: number)=>{
         if (!removeTrophe) {
             throw badRequestError(`Failed to delete trophe with id ${id.toString()}`)
         }
+        return removeTrophe;
     } catch (error) {
         throw new error({message: error.message})
     }

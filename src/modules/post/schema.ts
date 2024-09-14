@@ -1,14 +1,20 @@
 import {string, z} from "zod";
 
-export const joueurDetail = z.object({
-    GARDIEN_DE_BUT: z.string(),
-    ARRIERE_LATERAL: z.string(),
-    STOPPEUR: z.string(),
-    LIBERO: z.string(),
-    MILIEU_DEFENSIF: z.string(),
-    MILIEU_OFFENSIF: z.string(),
-    ATTAQUANT: z.string(),
-    AVANT_CENTRE: z.string(),
-    REMPLACANT: z.string()
-});
+export const PostEnum = z.enum(
+   [ "GARDIEN_DE_BUT",
+   "ARRIERE_LATERAL",
+    "STOPPEUR",
+    "LIBERO",
+    "MILIEU_DEFENSIF",
+   "MILIEU_OFFENSIF",
+    "ATTAQUANT",
+    "AVANT_CENTRE",
+    "REMPLACANT"]
+);
+
+export type CreatePost = z.infer<typeof PostEnum>;
+
+export const post = {
+    PostEnum
+};
 
