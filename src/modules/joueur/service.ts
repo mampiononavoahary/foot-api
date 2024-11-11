@@ -19,25 +19,26 @@ export const getAllJoueur = async() =>{
     }
 }
 
-export const getJoueursByName = async(name: string) => {
+export const getJoueursByName = async (name: string) => {
     try {
-        const joueur = await prisma.joueur.findMany({
-            where:{
-                name: name
-            },
-            include:{
-                detail:true
-            },
+        const joueurs = await prisma.joueur.findMany({
+            where: {
+                name: {
+                    contains: name,  // This allows for partial matching (like SQL's LIKE %name%)
+                    mode: 'insensitive'  // Optional: makes the search case-insensitive
+                }
+            }
         });
-        if (joueur.length == 0) {
-            throw notFoundError(`joueur with name ${name} not found`)
+
+        if (joueurs.length === 0) {
+            throw new Error(`Joueur with name ${name} not found`);
         }
-        return joueur;
+
+        return joueurs;
     } catch (error) {
-        throw new error({message: error.message})
+        throw new Error(error.message);
     }
 }
-
 export const saveJoueur = async(data:createJoueur)=> {
     try {
         const {name,prenoms,dateDeNaissance,address,contact,joueurDetail} = data;
